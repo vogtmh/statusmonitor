@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -10,6 +11,8 @@ import (
 
 	"github.com/boltdb/bolt"
 )
+//go:embed web/*
+var webFS embed.FS
 
 type StatusEntry struct {
 	Timestamp int64  `json:"timestamp"`
@@ -39,9 +42,9 @@ func main() {
 	http.HandleFunc("/api/ping", handlePing)
 	http.HandleFunc("/api/hosts", handleHosts)
 	http.HandleFunc("/api/history", handleHistory)
-	http.Handle("/", http.FileServer(http.Dir("./web")))
+	http.Handle("/", http.FileServer(http.FS(webFS)))
 
-	fmt.Println("Server running on :8086 (dynamic subpath)")
+	fmt.Println("Server running on :8086 (dynamic subpath, embedded web directory)")
 	log.Fatal(http.ListenAndServe(":8086", nil))
 }
 
