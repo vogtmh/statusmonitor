@@ -25,45 +25,6 @@ async function loadHosts() {
     }).join('') + '</ul>';
 }
 
-async function showChart(hostname) {
-    document.getElementById('chart-container').style.display = 'block';
-    document.getElementById('host-title').textContent = hostname;
-    const res = await fetch(`${BASE}api/history?hostname=${encodeURIComponent(hostname)}`);
-    const history = await res.json();
-    const labels = history.map(e => new Date(e.timestamp * 1000).toLocaleString());
-    const data = history.map(e => e.up ? 1 : 0);
-    if (window.statusChart && typeof window.statusChart.destroy === 'function') {
-        window.statusChart.destroy();
-    }
-    const ctx = document.getElementById('statusChart').getContext('2d');
-    window.statusChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels,
-            datasets: [{
-                label: 'Up (1) / Down (0)',
-                data,
-                borderColor: 'green',
-                backgroundColor: 'rgba(0,255,0,0.1)',
-                fill: true,
-                stepped: true
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    min: 0,
-                    max: 1,
-                    ticks: { stepSize: 1 }
-                }
-            }
-        }
-    });
-}
-
-function closeChart() {
-    document.getElementById('chart-container').style.display = 'none';
-}
 
 window.onload = loadHosts;
 
