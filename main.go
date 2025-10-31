@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"sort"
 	"time"
+	"io/fs"
 
 	"github.com/boltdb/bolt"
 )
@@ -42,10 +43,23 @@ func main() {
 	http.HandleFunc("/api/ping", handlePing)
 	http.HandleFunc("/api/hosts", handleHosts)
 	http.HandleFunc("/api/history", handleHistory)
-	http.Handle("/", http.FileServer(http.FS(webFS)))
 
-	fmt.Println("Server running on :8086 (dynamic subpath, embedded web directory)")
-	log.Fatal(http.ListenAndServe(":8086", nil))
+	// Serve files from embedded web/ directory at root, hiding /web/
+       fs, err := fsSub(webFS, "web")
+       if err != nil {
+	       log.Fatal(err)
+       }
+       http.Handle("/", http.FileServer(http.FS(fs)))
+
+       fmt.Println("Server running on :8086 (dynamic subpath, embedded web directory)")
+       log.Fatal(http.ListenAndServe(":8086", nil))
+
+// End of main
+}
+
+// Helper for Go <1.16.7 compatibility
+func fsSub(fsys embed.FS, dir string) (fs.FS, error) {
+	return fs.Sub(fsys, dir)
 }
 
 func handlePing(w http.ResponseWriter, r *http.Request) {
