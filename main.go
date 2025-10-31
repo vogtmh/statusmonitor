@@ -41,7 +41,7 @@ func main() {
 	http.HandleFunc("/api/history", handleHistory)
 	http.Handle("/", http.FileServer(http.Dir("./web")))
 
-	fmt.Println("Server running on :8086")
+	fmt.Println("Server running on :8086 (dynamic subpath)")
 	log.Fatal(http.ListenAndServe(":8086", nil))
 }
 
