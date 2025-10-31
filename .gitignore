@@ -1,0 +1,23 @@
+# Go build and dependency files
+status.db
+*.exe
+*.out
+*.test
+
+# Dependency directories
+vendor/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# Node modules (if any JS tooling is added)
+node_modules/
