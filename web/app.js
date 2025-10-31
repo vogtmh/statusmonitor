@@ -1,6 +1,18 @@
 
+
+// Detect base path for subpath deployments
+function getBasePath() {
+    let path = window.location.pathname;
+    // Remove trailing filename if present
+    if (path.endsWith('.html')) path = path.substring(0, path.lastIndexOf('/') + 1);
+    // Ensure trailing slash
+    if (!path.endsWith('/')) path += '/';
+    return path;
+}
+const BASE = getBasePath();
+
 async function loadHosts() {
-    const res = await fetch('/api/hosts');
+    const res = await fetch(BASE + 'api/hosts');
     const hosts = await res.json();
     const hostsDiv = document.getElementById('hosts');
     hostsDiv.innerHTML = '<ul>' + hosts.map(h => {
@@ -16,7 +28,7 @@ async function loadHosts() {
 async function showChart(hostname) {
     document.getElementById('chart-container').style.display = 'block';
     document.getElementById('host-title').textContent = hostname;
-    const res = await fetch(`/api/history?hostname=${encodeURIComponent(hostname)}`);
+    const res = await fetch(`${BASE}api/history?hostname=${encodeURIComponent(hostname)}`);
     const history = await res.json();
     const labels = history.map(e => new Date(e.timestamp * 1000).toLocaleString());
     const data = history.map(e => e.up ? 1 : 0);
