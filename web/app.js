@@ -20,8 +20,8 @@ async function loadHosts() {
         const now = Date.now() / 1000;
         let badgeColor = 'red';
         if (h.last_seen && (now - h.last_seen) < 600) badgeColor = 'green';
-        const badge = `<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${badgeColor};margin-right:8px;vertical-align:middle;"></span>`;
-        return `<li>${badge}<span>${h.hostname}</span> <span style="color:#888;font-size:0.9em;">(${date})</span></li>`;
+        const badge = `<span class="host-badge" style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${badgeColor};vertical-align:middle;"></span>`;
+        return `<li>${badge}<span class="host-name">${h.hostname}</span><span class="host-date">${date}</span></li>`;
     }).join('') + '</ul>';
 }
 
