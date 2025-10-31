@@ -15,7 +15,6 @@ fi
 echo "Updating executable .."
 mkdir -p /opt/${appname}
 mv build/${appname}_linux /opt/${appname}/${appname}_linux
-cp oui.json /opt/${appname}/oui.json
 
 echo "Updating service .."
 mkdir -p /var/log/${appname}
